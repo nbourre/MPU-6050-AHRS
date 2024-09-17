@@ -103,7 +103,7 @@ void MPU6050AHRS::updateFilter() {
   Axyz[2] = (static_cast<float>(az_raw) - A_cal[2]) * A_cal[5];
 
   // Apply calibration to gyro data
-  const float gscale = ((250.0f / 32768.0f) * (PI / 180.0f));  // Convert to radians/s
+  const float gscale = ((250.0f / 32768.0f) * DEG_TO_RAD);  // Convert to radians/s
   Gxyz[0] = (static_cast<float>(gx_raw) - G_off[0]) * gscale;
   Gxyz[1] = (static_cast<float>(gy_raw) - G_off[1]) * gscale;
   Gxyz[2] = (static_cast<float>(gz_raw) - G_off[2]) * gscale;
@@ -119,10 +119,10 @@ void MPU6050AHRS::computeAngles() {
   yaw = -atan2(q[1] * q[2] + q[0] * q[3], 0.5f - q[2] * q[2] - q[3] * q[3]);
 
   // Convert to degrees
-  yaw *= 180.0f / PI;
+  yaw *= RAD_TO_DEG;
   if (yaw < 0) yaw += 360.0f;
-  pitch *= 180.0f / PI;
-  roll *= 180.0f / PI;
+  pitch *= RAD_TO_DEG;
+  roll *= RAD_TO_DEG;
 }
 
 float MPU6050AHRS::getYaw() {
@@ -139,6 +139,18 @@ float MPU6050AHRS::getRoll() {
 
 bool MPU6050AHRS::isCalibrated() {
   return calibrated;
+}
+
+float MPU6050AHRS::getAccelX() {
+  return Axyz[0];
+}
+
+float MPU6050AHRS::getAccelY() {
+  return Axyz[1];
+}
+
+float MPU6050AHRS::getAccelZ() {
+  return Axyz[2];
 }
 
 void MPU6050AHRS::updateMahonyFilter(float ax, float ay, float az, float gx, float gy, float gz, float deltat) {

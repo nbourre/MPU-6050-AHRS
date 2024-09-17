@@ -17,6 +17,11 @@ public:
     float getRoll();
     bool isCalibrated();
 
+    float getAccelX();
+    float getAccelY();
+    float getAccelZ();
+
+
 private:
     void updateMahonyFilter(float ax, float ay, float az, float gx, float gy, float gz, float deltat);
 
@@ -55,6 +60,7 @@ private:
     bool calibrated;
     unsigned int cal_count;
     long gsum[3];
+    
 };
 
 #endif // MPU6050AHRS_H
